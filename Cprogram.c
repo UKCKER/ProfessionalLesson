@@ -957,7 +957,7 @@ int main()
 }
 */
 
-/* 双链表学习
+/* 双链表学习*/
 #include <stdio.h>
 #include <stdlib.h>
 typedef int ElemType;
@@ -965,14 +965,15 @@ typedef int ElemType;
 typedef struct DNode
 {
     ElemType data;
-    struct DNode *prev;  // 前驱指针
-    struct DNode *next;  // 后继指针
+    struct DNode *prev; // 前驱指针
+    struct DNode *next; // 后继指针
 } DNode, *DLinkList;
 
 DLinkList initList()
 {
     DNode *head = (DNode *)malloc(sizeof(DNode));
-    if (head == NULL) exit(1);
+    if (head == NULL)
+        exit(1);
     head->prev = NULL;
     head->next = NULL;
     return head;
@@ -989,7 +990,7 @@ void headInsert(DLinkList L, ElemType e)
     newNode->next = L->next;
     if (L->next != NULL)
     {
-        L->next->prev = newNode;  // 原首节点的prev指向新节点
+        L->next->prev = newNode; // 原首节点的prev指向新节点
     }
     newNode->prev = L;
     L->next = newNode;
@@ -999,14 +1000,15 @@ void headInsert(DLinkList L, ElemType e)
 void tailInsert(DLinkList L, ElemType e)
 {
     DNode *newNode = (DNode *)malloc(sizeof(DNode));
-    if (newNode == NULL) exit(1);
+    if (newNode == NULL)
+        exit(1);
     newNode->data = e;
     newNode->next = NULL;
 
     DNode *p = L;
     while (p->next != NULL)
     {
-        p = p->next;  // 找到尾节点
+        p = p->next; // 找到尾节点
     }
     p->next = newNode;
     newNode->prev = p;
@@ -1015,17 +1017,20 @@ void tailInsert(DLinkList L, ElemType e)
 // 4. 在指定位置插入（位置从1开始）
 void insertAt(DLinkList L, int pos, ElemType e)
 {
-    if (pos < 1) return;
+    if (pos < 1)
+        return;
 
     DNode *p = L;
     for (int i = 0; i < pos - 1 && p != NULL; i++)
     {
-        p = p->next;  // 找到pos的前驱节点
+        p = p->next; // 找到pos的前驱节点
     }
-    if (p == NULL) return;  // 位置无效
+    if (p == NULL)
+        return; // 位置无效
 
     DNode *newNode = (DNode *)malloc(sizeof(DNode));
-    if (newNode == NULL) exit(1);
+    if (newNode == NULL)
+        exit(1);
     newNode->data = e;
 
     newNode->next = p->next;
@@ -1040,15 +1045,16 @@ void insertAt(DLinkList L, int pos, ElemType e)
 // 5. 删除指定位置的节点
 void deleteAt(DLinkList L, int pos)
 {
-    if (pos < 1) return;
+    if (pos < 1)
+        return;
 
     DNode *p = L->next;
     for (int i = 1; i < pos && p != NULL; i++)
     {
-        p = p->next;  // 找到待删除节点
+        p = p->next; // 找到待删除节点
     }
     if (p == NULL)
-        return;  // 位置无效
+        return; // 位置无效
 
     p->prev->next = p->next;
     if (p->next != NULL)
@@ -1070,7 +1076,7 @@ int locateElem(DLinkList L, ElemType e)
         p = p->next;
         pos++;
     }
-    return -1;  // 未找到
+    return -1; // 未找到
 }
 
 // 7. 遍历打印链表（双向验证）
@@ -1088,7 +1094,7 @@ void printList(DLinkList L)
     printf("反向遍历: ");
     p = L;
     while (p->next != NULL)
-        p = p->next;  // 先走到尾节点
+        p = p->next; // 先走到尾节点
     while (p != L)
     {
         printf("%d -> ", p->data);
@@ -1107,7 +1113,7 @@ void freeList(DLinkList L)
         p = p->next;
         free(temp);
     }
-    free(L);  // 释放头节点
+    free(L); // 释放头节点
 }
 
 int main()
@@ -1121,8 +1127,8 @@ int main()
 
     printList(L);
     // 输出：
-    //    正向遍历: 20 -> 50 -> 10 -> 30 -> NULL
-    //    反向遍历: 30 -> 10 -> 50 -> 20 -> HEAD
+    // 正向遍历: 20 -> 50 -> 10 -> 30 -> NULL
+    // 反向遍历: 30 -> 10 -> 50 -> 20 -> HEAD
 
     deleteAt(L, 3);
     printf("删除后: ");
@@ -1134,7 +1140,6 @@ int main()
     freeList(L);
     return 0;
 }
-*/
 
 /* 栈 数组实现
 #include <stdio.h>
