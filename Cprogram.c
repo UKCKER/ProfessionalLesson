@@ -957,7 +957,7 @@ int main()
 }
 */
 
-/* 双链表学习*/
+/* 双链表学习
 #include <stdio.h>
 #include <stdlib.h>
 typedef int ElemType;
@@ -1140,6 +1140,122 @@ int main()
     freeList(L);
     return 0;
 }
+*/
+
+/* 双链表复刻
+#include <stdio.h>
+#include <stdlib.h>
+typedef int ElemType;
+typedef struct DNode
+{
+    ElemType data;
+    struct DNode *prior;
+    struct DNode *next;
+} DNode, *DoubleLink;
+
+DoubleLink initList()
+{
+    DoubleLink head = (DoubleLink)malloc(sizeof(DNode));
+    head->prior = NULL;
+    head->next = NULL;
+    return head;
+}
+
+void headinsert(DoubleLink head, ElemType e)
+{
+    DoubleLink temp = (DoubleLink)malloc(sizeof(DNode));
+    temp->data = e;
+
+    temp->next = head->next;
+    temp->prior = head;
+    if (head->next != NULL)
+    {
+        head->next->prior = temp;
+    }
+    head->next = temp;
+}
+
+void tailinsert(DoubleLink head, ElemType e)
+{
+    DoubleLink temp = (DoubleLink)malloc(sizeof(DNode));
+    temp->data = e;
+    temp->next = NULL;
+
+    DoubleLink p = head;
+    while (p->next != NULL)
+    {
+        p = p->next;
+    }
+    temp->prior = p;
+    p->next = temp;
+}
+
+// 正向遍历
+void headdisplay(DoubleLink head)
+{
+    DoubleLink p = head->next;
+    while (p != NULL)
+    {
+        printf("%d ", p->data);
+        p = p->next;
+    }
+    printf("\n");
+}
+
+// 反向遍历
+void taildisplay(DoubleLink head)
+{
+    // 先找到最后一个节点
+    DoubleLink p = head;
+    while (p->next != NULL)
+    {
+        p = p->next;
+    }
+
+    // 从后向前遍历
+    while (p != head)
+    {
+        printf("%d ", p->data);
+        p = p->prior;
+    }
+    printf("\n");
+}
+
+void singledelete(DoubleLink head, ElemType e)
+{
+    DoubleLink p = head->next;
+    while (p != NULL)
+    {
+        if (p->data == e)
+        {
+            p->prior->next = p->next;
+            p->next->prior = p->prior;
+            free(p);
+            return;
+        }
+        p = p->next;
+    }
+}
+
+int main()
+{
+    DoubleLink head = initList();
+    headinsert(head, 10);
+    headinsert(head, 20);
+    headinsert(head, 30);
+    tailinsert(head, 40);
+    tailinsert(head, 50);
+
+    headdisplay(head);
+    taildisplay(head);
+
+    singledelete(head, 20);
+    headdisplay(head);
+    taildisplay(head);
+
+    return 0;
+}
+*/
 
 /* 栈 数组实现
 #include <stdio.h>
@@ -1285,7 +1401,7 @@ int pop(LinkedStack *stack)
 }
 */
 
-/* 栈复刻
+/* 栈 数组复刻
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
