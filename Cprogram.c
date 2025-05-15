@@ -906,7 +906,7 @@ int main()
 }
 */
 
-/* 单链表 复刻2*/
+/* 单链表 复刻2
 #include <stdio.h>
 #include <stdlib.h>
 #define MAXSIZE 100
@@ -957,6 +957,7 @@ int main()
     display(L);
     return 0;
 }
+*/
 
 /* 双链表学习
 #include <stdio.h>
@@ -1349,60 +1350,84 @@ int main()
 }
 */
 
-/* 栈 动态实现
+/* 数组栈复刻2
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-
-typedef struct StackNode
-{
-    int data;
-    struct StackNode *next;
-} StackNode;
+#define MAXSIZE 100
+typedef int ElemType;
 
 typedef struct
 {
-    StackNode *top;
-} LinkedStack;
+    ElemType data[MAXSIZE];
+    int top;
+} ArrayStack;
 
-void initStack(LinkedStack *stack)
+void initstack(ArrayStack *stack)
 {
-    stack->top = NULL;
+    stack->top = -1;
 }
 
-bool isEmpty(LinkedStack *stack)
+void push(ArrayStack *stack, ElemType e)
 {
-    return stack->top == NULL;
-}
-
-void push(LinkedStack *stack, int value)
-{
-    StackNode *newNode = (StackNode*)malloc(sizeof(StackNode));
-    if (!newNode)
+    if (stack->top == MAXSIZE - 1)
     {
-        exit(1);
+        printf("Full stack\n");
+        return;
     }
-    newNode->data = value;
-    newNode->next = stack->top;
-    stack->top = newNode;
+    stack->data[++stack->top] = e;
 }
 
-int pop(LinkedStack *stack)
+void pop(ArrayStack *stack)
 {
-    if (isEmpty(stack))
+    if (stack->top == -1)
     {
-        printf("Stack Underflow!\n");
-        exit(1);
+        printf("Empty stack!\n");
+        return;
     }
-    StackNode *temp = stack->top;
-    int value = temp->data;
-    stack->top = temp->next;
-    free(temp);
-    return value;
+    stack->top--;
+}
+
+void display(ArrayStack *stack)
+{
+    if (stack->top == -1)
+    {
+        printf("NULL\n");
+        return;
+    }
+    printf("stack: ");
+    for (int i = stack->top; i >= 0; i--)
+    {
+        printf("%d", stack->data[i]);
+        if (i > 0)
+        {
+            printf(" ");
+        }
+    }
+    printf("\n");
+}
+
+int main()
+{
+    ArrayStack stack;
+    initstack(&stack);
+
+    push(&stack, 789);
+    push(&stack, 56);
+    push(&stack, 56);
+    push(&stack, 57);
+    push(&stack, 55);
+    push(&stack, 363);
+
+    display(&stack);
+    pop(&stack);
+    pop(&stack);
+    display(&stack);
+
+    return 0;
 }
 */
 
-/* 栈 数组复刻
+/* 栈 数组复刻1
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -1475,6 +1500,182 @@ int main()
     PushStack(&s, 7);
 
     ListStack(&s);
+    return 0;
+}
+*/
+
+/* 栈 动态实现
+#include <stdio.h>
+#include <stdlib.h>
+
+// 定义链栈的节点结构
+typedef struct StackNode
+{
+    int data;               // 数据域
+    struct StackNode* next; // 指针域，指向下一个节点
+} StackNode;
+
+// 定义链栈结构
+typedef struct
+{
+    StackNode* top; // 栈顶指针
+} LinkStack;
+
+// 初始化链栈
+void InitStack(LinkStack* S)
+{
+    S->top = NULL; // 栈顶指针初始化为NULL
+}
+
+int push(linkstack* s, int x)
+{
+    stacknode* newnode = (stacknode*)malloc(sizeof(stacknode)); \\ 创建新节点
+    if (newNode == NULL)
+    {
+        return 0; \\ 内存分配失败
+    }
+    newNode->data = x;       \\ 设置新节点的数据
+    newNode->next = S->top;  \\ 新节点指向当前栈顶
+    S->top = newNode;        \\ 更新栈顶指针
+    return 1; \\ 入栈成功
+}
+
+// 出栈操作
+int Pop(LinkStack* S, int* x)
+{
+    if (S->top == NULL)
+    {
+        return 0; // 栈为空，无法出栈
+    }
+
+    StackNode* temp = S->top; // 保存当前栈顶节点
+    *x = temp->data;          // 将栈顶元素的值赋给x
+    S->top = temp->next;      // 更新栈顶指针
+    free(temp);               // 释放原栈顶节点
+    return 1; // 出栈成功
+}
+
+// 查看栈顶元素
+int GetTop(LinkStack* S, int* x)
+{
+    if (S->top == NULL)
+    {
+        return 0; // 栈为空，无法获取栈顶元素
+    }
+    *x = S->top->data; // 获取栈顶元素的值
+    return 1; // 获取成功
+}
+
+// 判断栈是否为空
+int IsEmpty(LinkStack* S)
+{
+    return S->top == NULL; // 如果栈顶指针为NULL，栈为空
+}
+
+int main() {
+    LinkStack S;
+    InitStack(&S); // 初始化链栈
+
+    // 入栈操作
+    Push(&S, 10);
+    Push(&S, 20);
+    Push(&S, 30);
+
+    // 查看栈顶元素
+    int top;
+    if (GetTop(&S, &top))
+    {
+        printf("栈顶元素是：%d\n", top); // 输出：栈顶元素是：30
+    }
+    else
+    {
+        printf("栈为空\n");
+    }
+
+    // 出栈操作
+    int popped;
+    if (Pop(&S, &popped))
+    {
+        printf("出栈元素：%d\n", popped); // 输出：出栈元素：30
+    }
+    else
+    {
+        printf("栈为空，无法出栈\n");
+    }
+
+    // 再次查看栈顶元素
+    if (GetTop(&S, &top))
+    {
+        printf("栈顶元素是：%d\n", top); // 输出：栈顶元素是：20
+    }
+    else
+    {
+        printf("栈为空\n");
+    }
+
+    return 0;
+}
+*/
+
+/* 栈 链表复刻
+#include <stdio.h>
+#include <stdlib.h>
+typedef int ElemType;
+typedef struct StackNode
+{
+    ElemType data;
+    struct StackNode *next;
+} SNode, *Stack;
+
+typedef struct
+{
+    Stack top;
+} LinkedStack;
+
+void initstack(LinkedStack *S)
+{
+    S->top = NULL;
+}
+
+void push(LinkedStack *S, ElemType e)
+{
+    Stack newnode = (Stack)malloc(sizeof(SNode));
+    newnode->data = e;
+    newnode->next = S->top;
+    S->top = newnode;
+}
+
+void pop(LinkedStack *S)
+{
+    if (S->top == NULL)
+    {
+        printf("Empty Stack!\n");
+        return;
+    }
+    Stack temp = S->top;
+    S->top = temp->next;
+    free(temp);
+}
+
+void display(LinkedStack *S)
+{
+    Stack current = S->top;
+    while (current != NULL)
+    {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+int main()
+{
+    LinkedStack *S = (LinkedStack *)malloc(sizeof(LinkedStack));
+    initstack(S);
+    push(S, 45);
+    push(S, 22);
+    push(S, 56);
+    display(S);
     return 0;
 }
 */
@@ -1688,8 +1889,6 @@ int main()
     return 0;
 }
 */
-
-/* 新的学习 */
 
 /* 二叉树实现示例
 #include <stdio.h>
