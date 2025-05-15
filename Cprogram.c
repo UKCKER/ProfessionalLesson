@@ -906,7 +906,7 @@ int main()
 }
 */
 
-/* 单链表 复刻2
+/* 单链表 复刻2*/
 #include <stdio.h>
 #include <stdlib.h>
 #define MAXSIZE 100
@@ -918,11 +918,12 @@ typedef struct point
 } LinkNode, *Link;
 
 // 创建链表
-void create(Link *L)
+Link initlist(Link L)
 {
-    *L = (Link)malloc(sizeof(LinkNode));
-    (*L)->data = 0; // 使用0而不是NULL，因为data是int类型
-    (*L)->next = NULL;
+    L = (Link)malloc(sizeof(LinkNode));
+    L->data = 0;
+    L->next = NULL;
+    return L;
 }
 
 void insert(Link L, ElemType e)
@@ -946,16 +947,16 @@ void display(Link L)
 
 int main()
 {
-    Link L;
-    create(&L); // 注意这里传递L的地址
+    Link L = initlist(L);
     insert(L, 88);
-    insert(L, 99); // 添加更多数据测试
+    insert(L, 99);
+
     display(L);
+
     insert(L, 77);
     display(L);
     return 0;
 }
-*/
 
 /* 双链表学习
 #include <stdio.h>
@@ -1689,3 +1690,224 @@ int main()
 */
 
 /* 新的学习 */
+
+/* 二叉树实现示例
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+// 定义二叉树节点结构
+typedef struct TreeNode
+{
+    int data;                    // 节点数据
+    struct TreeNode *left;       // 左子树指针
+    struct TreeNode *right;      // 右子树指针
+} TreeNode, *Tree;
+
+// 创建新节点
+Tree createNode(int value)
+{
+    Tree newNode = (Tree)malloc(sizeof(TreeNode));
+    if (newNode == NULL)
+    {
+        printf("内存分配失败！\n");
+        exit(1);
+    }
+    newNode->data = value;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+// 创建示例二叉树
+Tree createSampleTree()
+ {
+    // 创建如下结构的二叉树：
+    //       1
+    //      / \
+    //     2   3
+    //    / \   \
+    //   4   5   6
+    //  /
+    // 7
+
+    TreeNode* root = createNode(1);
+    root->left = createNode(2);
+    root->right = createNode(3);
+    root->left->left = createNode(4);
+    root->left->right = createNode(5);
+    root->right->right = createNode(6);
+    root->left->left->left = createNode(7);
+    return root;
+}
+
+// 前序遍历（根-左-右）
+void preorderTraversal(Tree root)
+ {
+    if (root != NULL)
+    {
+        printf("%d ", root->data);    // 先访问根节点
+        preorderTraversal(root->left); // 再遍历左子树
+        preorderTraversal(root->right);// 最后遍历右子树
+    }
+}
+
+// 中序遍历（左-根-右）
+void inorderTraversal(Tree root)
+{
+    if (root != NULL)
+    {
+        inorderTraversal(root->left);  // 先遍历左子树
+        printf("%d ", root->data);     // 再访问根节点
+        inorderTraversal(root->right); // 最后遍历右子树
+    }
+}
+
+// 后序遍历（左-右-根）
+void postorderTraversal(Tree root)
+{
+    if (root != NULL)
+    {
+        postorderTraversal(root->left);  // 先遍历左子树
+        postorderTraversal(root->right); // 再遍历右子树
+        printf("%d ", root->data);       // 最后访问根节点
+    }
+}
+
+// 层序遍历（使用队列实现）
+#define MAX_QUEUE_SIZE 100
+typedef struct
+{
+    TreeNode* data[MAX_QUEUE_SIZE];
+    int front;
+    int rear;
+} Queue;
+
+void initQueue(Queue* q)
+{
+    q->front = q->rear = 0;
+}
+
+bool isQueueEmpty(Queue* q)
+{
+    return q->front == q->rear;
+}
+
+bool isQueueFull(Queue* q)
+{
+    return (q->rear + 1) % MAX_QUEUE_SIZE == q->front;
+}
+
+void enqueue(Queue* q, TreeNode* node)
+{
+    if (!isQueueFull(q))
+    {
+        q->data[q->rear] = node;
+        q->rear = (q->rear + 1) % MAX_QUEUE_SIZE;
+    }
+}
+
+TreeNode* dequeue(Queue* q)
+{
+    if (!isQueueEmpty(q))
+    {
+        TreeNode* node = q->data[q->front];
+        q->front = (q->front + 1) % MAX_QUEUE_SIZE;
+        return node;
+    }
+    return NULL;
+}
+
+void levelOrderTraversal(Tree root)
+{
+    if (root == NULL) return;
+
+    Queue q;
+    initQueue(&q);
+    enqueue(&q, root);
+
+    while (!isQueueEmpty(&q))
+    {
+        TreeNode* current = dequeue(&q);
+        printf("%d ", current->data);
+
+        if (current->left != NULL)
+            enqueue(&q, current->left);
+        if (current->right != NULL)
+            enqueue(&q, current->right);
+    }
+}
+
+// 计算树的高度
+int getHeight(Tree root)
+{
+    if (root == NULL) return 0;
+
+    int leftHeight = getHeight(root->left);
+    int rightHeight = getHeight(root->right);
+
+    return (leftHeight > rightHeight ? leftHeight : rightHeight) + 1;
+}
+
+// 查找节点
+TreeNode* findNode(Tree root, int value)
+{
+    if (root == NULL || root->data == value)
+        return root;
+
+    TreeNode* left = findNode(root->left, value);
+    if (left != NULL) return left;
+
+    return findNode(root->right, value);
+}
+
+// 释放树的内存
+void freeTree(Tree root)
+{
+    if (root != NULL)
+    {
+        freeTree(root->left);
+        freeTree(root->right);
+        free(root);
+    }
+}
+
+int main()
+{
+    // 创建示例树
+    Tree root = createSampleTree();
+
+    printf("二叉树遍历演示：\n");
+
+    printf("前序遍历（根-左-右）：");
+    preorderTraversal(root);
+    printf("\n");
+
+    printf("中序遍历（左-根-右）：");
+    inorderTraversal(root);
+    printf("\n");
+
+    printf("后序遍历（左-右-根）：");
+    postorderTraversal(root);
+    printf("\n");
+
+    printf("层序遍历：");
+    levelOrderTraversal(root);
+    printf("\n");
+
+    printf("树的高度：%d\n", getHeight(root));
+
+    // 查找节点示例
+    int searchValue = 5;
+    TreeNode* found = findNode(root, searchValue);
+    if (found != NULL)
+        printf("找到节点 %d\n", searchValue);
+    else
+        printf("未找到节点 %d\n", searchValue);
+
+    // 释放树的内存
+    freeTree(root);
+
+    return 0;
+}
+*/
