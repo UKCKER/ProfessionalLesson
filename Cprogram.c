@@ -1350,83 +1350,6 @@ int main()
 }
 */
 
-/* 数组栈复刻2
-#include <stdio.h>
-#include <stdlib.h>
-#define MAXSIZE 100
-typedef int ElemType;
-
-typedef struct
-{
-    ElemType data[MAXSIZE];
-    int top;
-} ArrayStack;
-
-void initstack(ArrayStack *stack)
-{
-    stack->top = -1;
-}
-
-void push(ArrayStack *stack, ElemType e)
-{
-    if (stack->top == MAXSIZE - 1)
-    {
-        printf("Full stack\n");
-        return;
-    }
-    stack->data[++stack->top] = e;
-}
-
-void pop(ArrayStack *stack)
-{
-    if (stack->top == -1)
-    {
-        printf("Empty stack!\n");
-        return;
-    }
-    stack->top--;
-}
-
-void display(ArrayStack *stack)
-{
-    if (stack->top == -1)
-    {
-        printf("NULL\n");
-        return;
-    }
-    printf("stack: ");
-    for (int i = stack->top; i >= 0; i--)
-    {
-        printf("%d", stack->data[i]);
-        if (i > 0)
-        {
-            printf(" ");
-        }
-    }
-    printf("\n");
-}
-
-int main()
-{
-    ArrayStack stack;
-    initstack(&stack);
-
-    push(&stack, 789);
-    push(&stack, 56);
-    push(&stack, 56);
-    push(&stack, 57);
-    push(&stack, 55);
-    push(&stack, 363);
-
-    display(&stack);
-    pop(&stack);
-    pop(&stack);
-    display(&stack);
-
-    return 0;
-}
-*/
-
 /* 栈 数组复刻1
 #include <stdio.h>
 #include <stdlib.h>
@@ -1504,6 +1427,83 @@ int main()
 }
 */
 
+/* 数组栈复刻2
+#include <stdio.h>
+#include <stdlib.h>
+#define MAXSIZE 100
+typedef int ElemType;
+
+typedef struct
+{
+    ElemType data[MAXSIZE];
+    int top;
+} ArrayStack;
+
+void initstack(ArrayStack *stack)
+{
+    stack->top = -1;
+}
+
+void push(ArrayStack *stack, ElemType e)
+{
+    if (stack->top == MAXSIZE - 1)
+    {
+        printf("Full stack\n");
+        return;
+    }
+    stack->data[++stack->top] = e;
+}
+
+void pop(ArrayStack *stack)
+{
+    if (stack->top == -1)
+    {
+        printf("Empty stack!\n");
+        return;
+    }
+    stack->top--;
+}
+
+void display(ArrayStack *stack)
+{
+    if (stack->top == -1)
+    {
+        printf("NULL\n");
+        return;
+    }
+    printf("stack: ");
+    for (int i = stack->top; i >= 0; i--)
+    {
+        printf("%d", stack->data[i]);
+        if (i > 0)
+        {
+            printf(" ");
+        }
+    }
+    printf("\n");
+}
+
+int main()
+{
+    ArrayStack stack;
+    initstack(&stack);
+
+    push(&stack, 789);
+    push(&stack, 56);
+    push(&stack, 56);
+    push(&stack, 57);
+    push(&stack, 55);
+    push(&stack, 363);
+
+    display(&stack);
+    pop(&stack);
+    pop(&stack);
+    display(&stack);
+
+    return 0;
+}
+*/
+
 /* 栈 动态实现
 #include <stdio.h>
 #include <stdlib.h>
@@ -1572,7 +1572,8 @@ int IsEmpty(LinkStack* S)
     return S->top == NULL; // 如果栈顶指针为NULL，栈为空
 }
 
-int main() {
+int main()
+{
     LinkStack S;
     InitStack(&S); // 初始化链栈
 
@@ -1680,65 +1681,7 @@ int main()
 }
 */
 
-/* 队列 数组实现
-#include <stdio.h>
-#include <stdlib.h>
-#define MAXSIZE 100
-typedef int ElemType;
-typedef struct
-{
-    ElemType data[MAXSIZE];
-    int front;
-    int rear;
-} Queue;
-
-void initQueue(Queue *Q)
-{
-    Q->front = Q->rear = 0;
-}
-
-int isempty(Queue *Q)
-{
-    if (Q->front == Q->rear)
-    {
-        printf("Empty\n");
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int enqueue(Queue *Q, ElemType e)
-{
-    if (Q->rear >= MAXSIZE)
-    {
-        if ()
-        {
-            return 0;
-        }
-    }
-
-    Q->data[Q->rear] = e;
-    Q->rear++;
-    return 1;
-}
-
-ElemType dequeue(Queue *Q)
-{
-    if (isempty(Q))
-    {
-        return 0;
-    }
-
-    ElemType e = Q->data[Q->front];
-    Q->front++;
-    return e;
-}
-*/
-
-/* 循环队列 数组
+/* 循环队列 数组实现
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -1788,6 +1731,143 @@ int dequeue(CircularQueue *queue)
     queue->front = (queue->front + 1) % MAX_SIZE;
     return value;
 }
+
+void printQueueStatus(CircularQueue *q)
+{
+    printf("Queue状态: ");
+    printf("Front=%d, Rear=%d, ", q->front, q->rear);
+    printf("元素: [");
+
+    int i = q->front;
+    while (i != q->rear)
+    {
+        printf("%d", q->data[i]);
+        i = (i + 1) % MAX_SIZE;
+        if (i != q->rear)
+            printf(", ");
+    }
+    printf("]\n");
+}
+
+int main()
+{
+    CircularQueue q;
+    initQueue(&q);
+    printQueueStatus(&q);
+
+    // 测试入队
+    for (int i = 1; i <= 5; i++)
+    {
+        printf("入队 %d: ", i);
+        enqueue(&q, i);
+        printQueueStatus(&q);
+    }
+
+    // 测试出队
+    for (int i = 1; i <= 3; i++)
+    {
+        printf("出队 -> %d\n", dequeue(&q));
+        printQueueStatus(&q);
+    }
+
+    // 测试循环特性
+    for (int i = 6; i <= 8; i++)
+    {
+        printf("入队 %d: ", i);
+        enqueue(&q, i);
+        printQueueStatus(&q);
+    }
+
+    dequeue(&q);
+
+    return 0;
+}
+
+*/
+
+/* 循环队列 复刻
+#include <stdio.h>
+#include <stdlib.h>
+#define SIZE 6
+typedef int ElemType;
+typedef struct QNode
+{
+    ElemType data[SIZE];
+    int front, rear;
+} QNode, *Queue;
+
+Queue initqueue()
+{
+    Queue q = (Queue)malloc(sizeof(QNode));
+    q->front = q->rear = 0;
+    return q;
+}
+
+void enqueue(Queue q, ElemType e)
+{
+    if ((q->rear + 1) % SIZE == q->front)
+    {
+        printf("Full of it! %4d is out!\n", e);
+        return;
+    }
+    q->data[q->rear] = e;
+    q->rear = (q->rear + 1) % SIZE;
+}
+
+void dequeue(Queue q)
+{
+    if (q->front == q->rear)
+    {
+        printf("Empty queue can not dequeue!\n");
+    }
+    q->rear -= 1;
+}
+
+void display(Queue q)
+{
+    if (q->front == q->rear)
+    {
+        printf("Empty queue has nothing to display!\n");
+    }
+    for (int i = q->front; i < q->rear; i++)
+    {
+        printf("%d", q->data[i]);
+        if (i < q->rear - 1)
+        {
+            printf(" ");
+        }
+    }
+    printf("\n");
+}
+
+int main()
+{
+    Queue q = initqueue();
+    enqueue(q, 56);
+    enqueue(q, 89);
+    enqueue(q, 811);
+    enqueue(q, 68);
+    enqueue(q, 8888);
+    enqueue(q, 128);
+    enqueue(q, 38);
+    enqueue(q, 77);
+    display(q);
+
+    dequeue(q);
+    display(q);
+
+    dequeue(q);
+    dequeue(q);
+    dequeue(q);
+    dequeue(q);
+    display(q);
+
+    dequeue(q);
+    dequeue(q);
+    dequeue(q);
+    display(q);
+    return 0;
+}
 */
 
 /* 队列 链式结构
@@ -1807,79 +1887,196 @@ typedef struct
     QueueNode *rear;
 } LinkedQueue;
 
+// 初始化队列
 void initQueue(LinkedQueue *queue)
 {
-    queue->front = queue->rear = NULL;
+    queue->front = NULL;
+    queue->rear = NULL;
 }
 
+// 判断队列是否为空
 bool isEmpty(LinkedQueue *queue)
 {
     return queue->front == NULL;
 }
 
-void enqueue(LinkedQueue *queue, int value)
+// 入队操作
+bool enqueue(LinkedQueue *queue, int value)
 {
     QueueNode *newNode = (QueueNode*)malloc(sizeof(QueueNode));
     if (!newNode)
     {
-        exit(1);
+        printf("Memory allocation failed!\n");
+        return false;
     }
     newNode->data = value;
     newNode->next = NULL;
 
     if (isEmpty(queue))
     {
-        queue->front = queue->rear = newNode;
+        queue->front = newNode;
     }
     else
     {
         queue->rear->next = newNode;
-        queue->rear = newNode;
     }
+    queue->rear = newNode;
+    return true;
 }
 
-int dequeue(LinkedQueue *queue)
+// 出队操作
+bool dequeue(LinkedQueue *queue, int *value)
 {
     if (isEmpty(queue))
     {
         printf("Queue Underflow!\n");
-        exit(1);
+        return false;
     }
+
     QueueNode *temp = queue->front;
-    int value = temp->data;
+    *value = temp->data;
     queue->front = temp->next;
+
+    if (queue->front == NULL)
+    {
+        queue->rear = NULL; // 队列已空
+    }
+
     free(temp);
-    return value;
+    return true;
 }
-*/
 
-/* 队列 链式结构复刻
-#include <stdio.h>
-#include <stdlib.h>
-#define MAXSIZE 100;
-typedef int ElemType;
-typedef struct QNode
+// 清空队列
+void clearQueue(LinkedQueue *queue)
 {
-    ElemType data;
-    struct QNode *next;
-} QNode;
+    while (!isEmpty(queue))
+    {
+        int dummy;
+        dequeue(queue, &dummy);
+    }
+}
 
-typedef struct
+// 打印队列
+void printQueue(LinkedQueue *queue)
 {
-    QNode *front;
-    QNode *rear;
-} Queue;
-
-Queue *initqueue()
-{
+    printf("Queue: [");
+    QueueNode *current = queue->front;
+    while (current != NULL)
+    {
+        printf("%d", current->data);
+        if (current->next != NULL)
+        {
+            printf(" -> ");
+        }
+        current = current->next;
+    }
+    printf("]\n");
 }
 
 int main()
 {
-    int n;
+    LinkedQueue queue;
+    initQueue(&queue);
+
+    // 测试入队
+    printf("Enqueue 10, 20, 30:\n");
+    enqueue(&queue, 10);
+    enqueue(&queue, 20);
+    enqueue(&queue, 30);
+    printQueue(&queue);
+
+    // 测试出队
+    printf("\nDequeue elements:\n");
+    int val;
+    while (dequeue(&queue, &val))
+    {
+        printf("Dequeued: %d\n", val);
+    }
+
+    // 测试空队列出队
+    printf("\nAttempt to dequeue empty queue:\n");
+    if (!dequeue(&queue, &val))
+    {
+        printf("Dequeue failed (expected)\n");
+    }
 
     return 0;
-}*/
+}
+*/
+
+/* 队列 链式复刻
+#include <stdio.h>
+#include <stdlib.h>
+typedef int ElemType;
+typedef struct qnode
+{
+    ElemType data;
+    struct qnode *next;
+} qnode, *QNode;
+
+typedef struct
+{
+    QNode front;
+    QNode rear;
+} lqueue, *LQueue;
+
+LQueue initqueue()
+{
+    LQueue q = (LQueue)malloc(sizeof(lqueue));
+    q->front = NULL;
+    q->rear = NULL;
+    return q;
+}
+
+void enqueue(LQueue q, ElemType e)
+{
+    QNode newnode = (QNode)malloc(sizeof(qnode));
+    newnode->data = e;
+    newnode->next = NULL;
+
+    if (q->front == NULL)
+    {
+        q->front = newnode;
+    }
+    else
+    {
+        q->rear->next = newnode;
+    }
+    q->rear = newnode;
+}
+
+void dequeue(LQueue q)
+{
+    QNode temp = q->front;
+    q->front = q->front->next;
+    free(temp);
+}
+
+void display(LQueue q)
+{
+    QNode temp = q->front;
+    while (temp != NULL)
+    {
+        printf("%d", temp->data);
+        temp = temp->next;
+        if (temp != NULL)
+        {
+            printf(" ");
+        }
+    }
+    printf("\n");
+}
+
+int main()
+{
+    LQueue q = initqueue();
+    enqueue(q, 234);
+    enqueue(q, 45);
+    display(q);
+
+    return 0;
+}
+*/
 
 /* git管理
 #include <stdio.h>
