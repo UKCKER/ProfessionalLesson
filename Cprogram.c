@@ -1259,6 +1259,87 @@ int main()
 }
 */
 
+/* 求链式线性表的倒数第K项
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct LNode
+{
+    int data;
+    struct LNode *next;
+} LNode, *LinkList;
+
+LinkList initlist()
+{
+    LinkList L = (LinkList)malloc(sizeof(LNode));
+    L->next = NULL;
+    return L;
+}
+
+// 重点是尾插法
+void create(LinkList l)
+{
+    int t;
+    LinkList tail = l; // 尾指针初始指向头节点
+    scanf("%d", &t);
+    while (t != -1)
+    {
+        LinkList newnode = (LinkList)malloc(sizeof(LNode));
+        newnode->data = t;
+        newnode->next = NULL; // 新节点指向NULL
+        tail->next = newnode; // 尾节点指向新节点
+        tail = newnode;       // 更新尾指针
+        scanf("%d", &t);
+    }
+}
+
+void find(LinkList l, int k)
+{
+    if (k <= 0)
+    {
+        printf("Error!");
+        return;
+    }
+
+    // 检查k是否超出链表长度
+    int len = 0;
+    LinkList p = l->next;
+    while (p != NULL)
+    {
+        len++;
+        p = p->next;
+    }
+    if (k > len)
+    {
+        printf("Error!");
+        return;
+    }
+
+    LinkList A = l;
+    LinkList B = l;
+    for (int i = 0; i < k; i++)
+    {
+        B = B->next;
+    }
+    while (B != NULL)
+    {
+        A = A->next;
+        B = B->next;
+    }
+    printf("%d", A->data);
+}
+
+int main()
+{
+    LinkList l = initlist();
+    int k;
+    scanf("%d", &k);
+    create(l);
+    find(l, k);
+    return 0;
+}
+*/
+
 /* 栈 数组实现
 #include <stdio.h>
 #include <stdlib.h>
